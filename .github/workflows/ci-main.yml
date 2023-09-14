@@ -35,15 +35,17 @@ jobs:
 
     - name: check sonar scanner
       id: sonar
-      run: echo "::set-output name=FOUND::$(dotnet tool list --global | grep -c 'sonarscanner')"
+      run: echo "FOUND=$(dotnet tool list --global | grep -c 'sonarscanner')"
 
     - name: install sonar scanner
       if: steps.sonar.outputs.FOUND != 1
-      run: dotnet tool install --global dotnet-sonarscanner        
+      run: dotnet tool install --global dotnet-sonarscanner
 
-    - name: install dependencies
-      run: dotnet restore ${{ github.workspace }}/$SOLUTION_PATH
+    - name: check sonar scanner 2
+      id: sonar2
+      run: echo "FOUND=$(dotnet tool list --global | grep -c 'sonarscanner')"
 
-    - name: dotnet build
-      run: dotnet build ${{ github.workspace }}/$SOLUTION_PATH --no-restore
+    - name: echo
+      if: steps.sonar2.outputs.FOUND == 1
+      run: echo "Hello Sonar"
       
