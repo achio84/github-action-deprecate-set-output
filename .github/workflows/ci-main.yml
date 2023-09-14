@@ -37,15 +37,15 @@ jobs:
       id: sonar
       run: echo "FOUND=$(dotnet tool list --global | grep -c 'sonarscanner')" >> $GITHUB_OUTPUT
 
-    - name: install sonar scanner
-      if: steps.sonar.outputs.FOUND != 1
+    - name: install sonar scanner (if runner doesn't have)
+      if: steps.sonar.outputs.FOUND == 0
       run: dotnet tool install --global dotnet-sonarscanner
 
-    - name: check sonar scanner 2
+    - name: check sonar scanner after installation
       id: sonar2
       run: echo "FOUND=$(dotnet tool list --global | grep -c 'sonarscanner')" >> $GITHUB_OUTPUT
 
-    - name: echo
+    - name: echo if sonar already installed
       if: steps.sonar2.outputs.FOUND == 1
       run: echo "Hello Sonar"
       
